@@ -1,6 +1,6 @@
 
 // Todo move to .env
-const API = 'http://localhost:3030'
+const API = 'http://localhost:3031'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const fetchData = async ({
@@ -10,7 +10,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     body,
     query = {},
     headers = {},
-    urlPrefix = 'api/v1',
+    urlPrefix = '',
     bearer = true,
     args = {},
   }: any) => {
@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       watch: false,
       baseURL: `${API}/${urlPrefix}/`,
       headers: {
-        'authorization': authorization,
+        // 'authorization': authorization,
         ...headers,
       },
       onResponse({ response }: { response: { _data: unknown } }) {

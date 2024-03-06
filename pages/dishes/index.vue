@@ -3,10 +3,8 @@ definePageMeta({
   middleware: ['auth'],
 })
 import MainLayout from "~/layouts/MainLayout.vue"
-import { useDishStore } from "~/stores/dishStore"
-
 const dishStore = useDishStore()
-const dishList = dishStore.getAll()
+const dishList = dishStore.getAll
 const isShowAppend = ref(false)
 </script>
 <template>

@@ -6,19 +6,20 @@ export function useAuth() {
     navigateTo('/auth')
   }
   const signIn = async (payload: {
-    username: string | null
+    login: string | null
     password: string | null
   }) => {
-    // Todo move this to onResponse before connect backend
+    // Todo move to onResponse
     useCookie('auth:token').value = 'TRUE'
     navigateTo('/')
-    return await $fetchData({
+      return await $fetchData({
       api: '/auth/sign-in',
       body: payload,
       method: 'post',
       args: {
         async onResponse({ response }: any) {
           if (!response.ok) return
+
         },
       },
     })

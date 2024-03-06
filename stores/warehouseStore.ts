@@ -1,13 +1,12 @@
 import {defineStore} from 'pinia'
 import type { IStructure } from "~/types/interfaces";
 import { defaultWarehouseList } from "~/data/defaultData";
-import { useProductStore } from "~/stores/productsStore";
 import { notify } from "~/services/notifiesService";
 
-const productStore = useProductStore()
 export const useWarehouseStore = defineStore('warehouse', () => {
+  const productStore = useProductStore()
   const warehouse: Ref<IStructure[]> = ref(defaultWarehouseList);
-  const getAll = () => warehouse.value
+  const getAll = computed(() => warehouse.value)
   const get = (id: number) => warehouse.value.find(product => product.product_id === id)
   const append = (product: IStructure) => warehouse.value.push(product);
   const changeWeight = (product_id: number, weight: number) => {
@@ -23,7 +22,7 @@ export const useWarehouseStore = defineStore('warehouse', () => {
   }
   const buy = (product: IStructure) => {
     if (!get(product.product_id)) {
-      append(product)
+      add(product)
       return
     }
     changeWeight(product.product_id, product.weight);
@@ -35,5 +34,5 @@ export const useWarehouseStore = defineStore('warehouse', () => {
     }
     changeWeight(productId, -weight);
   }
-  return { get, getAll, changeWeight, buy, spend }
+  return { warehouse, get, getAll, changeWeight, buy, spend }
 })

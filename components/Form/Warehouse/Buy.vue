@@ -4,7 +4,7 @@ import { useWarehouseStore } from "~/stores/warehouseStore";
 
 const warehouseStore = useWarehouseStore();
 const productStore = useProductStore();
-const productList = productStore.getAll()
+const productList = productStore.getAll
 const productId = ref()
 const weight = ref(0)
 const onSubmit = () => {

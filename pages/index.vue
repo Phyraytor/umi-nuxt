@@ -3,17 +3,14 @@ definePageMeta({
   middleware: ['auth'],
 })
 import { FormWarehouseBuy } from "#components"
-import { useWarehouseStore } from "~/stores/warehouseStore"
-import { useProductStore } from "~/stores/productsStore"
-import { useDishStore } from "~/stores/dishStore"
 import type { IDish, IStructure } from "~/types/interfaces"
 import MainLayout from "~/layouts/MainLayout.vue"
 
 const warehouseStore = useWarehouseStore()
 const productStore = useProductStore()
 const dishStore = useDishStore()
-const productList: IStructure[] = warehouseStore.getAll()
-const dishList: IDish[] = dishStore.getAll()
+const productList: IStructure[] = warehouseStore.getAll
+const dishList: IDish[] = dishStore.getAll
 const isShowBuyForm = ref(false)
 const toggleShowBuyForm = () => isShowBuyForm.value = !isShowBuyForm.value
 const getProductName = (id: number) => productStore.get(id)?.name

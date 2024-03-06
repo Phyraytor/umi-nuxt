@@ -3,10 +3,9 @@ definePageMeta({
   middleware: ['auth'],
 })
 import MainLayout from "~/layouts/MainLayout.vue"
-import { useProductStore } from "~/stores/productsStore";
 import type { IProduct } from "~/types/interfaces";
 const productStore = useProductStore()
-const productList: IProduct[] = productStore.getAll()
+const productList: IProduct[] = productStore.getAll
 </script>
 
 <template>

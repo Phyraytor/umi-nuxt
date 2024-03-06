@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import MainLayout from "~/layouts/MainLayout.vue"
-const username = ref('')
+import { useAuth } from "~/composables/auth";
+const login = ref('')
 const password = ref('')
 const { signIn } = useAuth()
-const auth = () => signIn({ username: username.value, password: password.value})
+const auth = () => signIn({ login: login.value, password: password.value})
+const { isLoggedIn } = useAuth()
+if (isLoggedIn()) {
+  navigateTo('/')
+}
 </script>
 <template>
   <MainLayout>
@@ -11,7 +16,7 @@ const auth = () => signIn({ username: username.value, password: password.value})
       <div class="flex flex-col gap-3 w-80 mb-36">
         <label for="" class="flex flex-col gap-1">
           <span class="text-xs">Login</span>
-          <input class="px-2 py-2 border-2 border-blue-50" type="text" v-model="username">
+          <input class="px-2 py-2 border-2 border-blue-50" type="text" v-model="login">
         </label>
         <label for="" class="flex flex-col gap-1">
           <span class="text-xs">Password</span>

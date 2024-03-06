@@ -1,14 +1,11 @@
 import { defineStore } from 'pinia'
-import { useProductStore } from '~/stores/productsStore'
-import type { IDish, IProduct, IProductSumField, IStructure } from "~/types/interfaces";
+import type { IDish, IProductSumField, IStructure } from "~/types/interfaces";
 import { defaultDishesList } from "~/data/defaultData";
-import { useWarehouseStore } from "~/stores/warehouseStore";
 import { notify } from "~/services/notifiesService";
 
-const productStore = useProductStore()
-const warehouseStore = useWarehouseStore()
-
 export const useDishStore = defineStore('dishes', () => {
+  const productStore = useProductStore()
+  const warehouseStore = useWarehouseStore()
   const dishes: Ref<IDish[]> = ref(defaultDishesList)
   const append = (name: string) => dishes.value.push({
     id: Math.max(...dishes.value.map(dish => dish.id)) + 1,
@@ -16,7 +13,7 @@ export const useDishStore = defineStore('dishes', () => {
     structure: [],
   });
   const get = (id: number) => dishes.value.find(dish => dish.id === id)
-  const getAll = () => dishes.value
+  const getAll = computed(() => dishes.value)
 
   const getSumField = (id: number, fieldName: IProductSumField, weightConst: number = 1) =>
     get(id)?.structure.reduce((acc: number, product: IStructure) =>
@@ -54,5 +51,5 @@ export const useDishStore = defineStore('dishes', () => {
     );
   }
 
-  return {append, get, getAll, makeDish, getPrice, getProteins, getFats, getCarbohydrates, getCalories}
+  return {dishes, append, get, getAll, makeDish, getPrice, getProteins, getFats, getCarbohydrates, getCalories}
 })
