@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       watch: false,
       baseURL: `${API}/${urlPrefix}/`,
       headers: {
-        // 'authorization': authorization,
+        'authorization': authorization,
         ...headers,
       },
       onResponse({ response }: { response: { _data: unknown } }) {
