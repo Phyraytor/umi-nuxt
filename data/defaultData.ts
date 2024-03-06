@@ -1,4 +1,4 @@
-import type { IDish, IProduct, IStructure } from "~/interfaces/interfaces";
+import type { IDish, IProduct, IStructure } from "~/types/interfaces";
 
 export const defaultDishesList: IDish[] = [
   {

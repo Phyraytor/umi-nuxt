@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { IProduct } from "~/interfaces/interfaces";
+import type { IProduct } from "~/types/interfaces";
 import { defaultProductsList } from "~/data/defaultData";
 
 export const useProductStore = defineStore('products', () => {

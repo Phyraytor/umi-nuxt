@@ -16,14 +16,20 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <div>
-    <select v-model="productId">
-      <option v-for="option in productList" :value="option.id">
+  <div class="flex flex-col gap-3">
+    <select class="px-2 py-1" v-model="productId">
+      <option v-for="option in productList" :value="option.id" class="px-2 py-1">
         {{ option.name }}
       </option>
     </select>
-    <input v-model="weight"/>
-    <button @click="onSubmit">Buy</button>
+    <label for="" class="flex flex-col gap-1">
+      <span class="text-xs">Weight:</span>
+      <input class="border-2 border-blue-50" v-model="weight"/>
+    </label>
+    <div class="flex justify-between">
+      <slot />
+      <button class="rounded bg-cyan-400 px-6 py-1 text-white" @click="onSubmit">Buy</button>
+    </div>
   </div>
 </template>
 
