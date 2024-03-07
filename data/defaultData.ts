@@ -1,4 +1,4 @@
-import type { IDish, IProduct, IStructure } from "~/types/interfaces";
+import type { IDish, IHistory, IProduct, IStructure } from "~/types/interfaces";
 
 export const defaultDishesList: IDish[] = [
   {
@@ -54,4 +54,19 @@ export const defaultWarehouseList: IStructure[] = [
   {product_id: 1, weight: 600},
   {product_id: 2, weight: 500},
   {product_id: 3, weight: 800},
+]
+
+export const defaultHistory: IHistory[] = [
+  {
+    day: 1,
+    dish_id: 1,
+  },
+  {
+    day: 1,
+    dish_id: 2,
+  },
+  {
+    day: 2,
+    dish_id: 1,
+  },
 ]

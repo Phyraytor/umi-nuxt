@@ -4,6 +4,7 @@ import { defaultDishesList } from "~/data/defaultData";
 import { notify } from "~/services/notifiesService";
 
 export const useDishStore = defineStore('dishes', () => {
+  const historyStore = useHistoryStore()
   const productStore = useProductStore()
   const warehouseStore = useWarehouseStore()
   const dishes: Ref<IDish[]> = ref(defaultDishesList)
@@ -19,12 +20,6 @@ export const useDishStore = defineStore('dishes', () => {
     get(id)?.structure.reduce((acc: number, product: IStructure) =>
         acc + weightConst * product.weight * (productStore.get(product.product_id)?.[fieldName] || 0)
       , 0).toFixed(2)
-
-  const isMakeDish = (dish: IDish) => {
-    return dish.structure.every(product =>
-      product.weight <= (warehouseStore.get(product.product_id)?.weight || 0)
-    )
-  }
   const getPrice = (id: number) =>
     getSumField(id, 'price', 1 / 1000);
   const getProteins = (id: number) =>
@@ -35,7 +30,12 @@ export const useDishStore = defineStore('dishes', () => {
     getSumField(id, 'carbohydrates', 1 / 100);
   const getCalories = (id: number) =>
     getSumField(id, 'calories', 1 / 100);
-  const makeDish = (id?: number) => {
+
+  const isMakeDish = (dish: IDish) =>
+    dish.structure.every(product =>
+      product.weight <= (warehouseStore.get(product.product_id)?.weight || 0)
+    )
+  const makeDish = (day: number, id?: number) => {
     if (!id) return;
     const dish = get(id);
     if (!dish) {
@@ -49,7 +49,11 @@ export const useDishStore = defineStore('dishes', () => {
     dish.structure.forEach(product =>
       warehouseStore.spend(product.product_id, product.weight)
     );
+    historyStore.append({
+      dish_id: Number(id),
+      day: Number(day),
+    })
   }
 
-  return {dishes, append, get, getAll, makeDish, getPrice, getProteins, getFats, getCarbohydrates, getCalories}
+  return {dishes, getSumField, append, get, getAll, makeDish, getPrice, getProteins, getFats, getCarbohydrates, getCalories}
 })

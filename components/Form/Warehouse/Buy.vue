@@ -9,7 +9,7 @@ const productId = ref()
 const weight = ref(0)
 const onSubmit = () => {
   warehouseStore.buy({
-    product_id: productId.value,
+    product_id: Number(productId.value),
     weight: weight.value,
   })
 }
@@ -17,18 +17,11 @@ const onSubmit = () => {
 
 <template>
   <div class="flex flex-col gap-3">
-    <select class="px-2 py-1" v-model="productId">
-      <option v-for="option in productList" :value="option.id" class="px-2 py-1">
-        {{ option.name }}
-      </option>
-    </select>
-    <label for="" class="flex flex-col gap-1">
-      <span class="text-xs">Weight:</span>
-      <input class="border-2 border-blue-50" v-model="weight"/>
-    </label>
+    <UISelect v-model="productId" :list="productList" />
+    <UIInput label="Weight" v-model="weight" />
     <div class="flex justify-between">
       <slot />
-      <button class="rounded bg-cyan-400 px-6 py-1 text-white" @click="onSubmit">Buy</button>
+      <UIButton :action="onSubmit">Buy</UIButton>
     </div>
   </div>
 </template>

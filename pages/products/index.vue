@@ -6,14 +6,22 @@ import MainLayout from "~/layouts/MainLayout.vue"
 import type { IProduct } from "~/types/interfaces";
 const productStore = useProductStore()
 const productList: IProduct[] = productStore.getAll
+const isShowAppend = ref(false)
+const toggleShow = () => isShowAppend.value = !isShowAppend.value
 </script>
 
 <template>
   <MainLayout>
-    <NuxtLink to="/" class="rounded bg-cyan-400 px-6 py-1 text-white mb-4 inline-flex">
-      Back
-    </NuxtLink>
-    <div class="flex gap-4 flex-wrap">
+    <div class="flex justify-between">
+      <NuxtLink to="/" class="rounded bg-cyan-400 px-6 py-1 text-white mb-4 inline-flex">
+        Back
+      </NuxtLink>
+      <UIButton :action="toggleShow">Append</UIButton>
+    </div>
+    <FormProductCreate v-if="isShowAppend">
+      <UIButton :action="toggleShow">Cancel</UIButton>
+    </FormProductCreate>
+    <div class="flex gap-4 flex-wrap mt-4">
       <div v-for="product in productList" :key="product.id" class="mb-4 p-4 border border-blue-50 border-2 w-80">
         <p class="text-2xl mb-4"> {{ product.name }}</p>
         <div class="flex">

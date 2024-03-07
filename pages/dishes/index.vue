@@ -6,6 +6,7 @@ import MainLayout from "~/layouts/MainLayout.vue"
 const dishStore = useDishStore()
 const dishList = dishStore.getAll
 const isShowAppend = ref(false)
+const toggleShow = () => isShowAppend.value = !isShowAppend.value
 </script>
 <template>
   <MainLayout>
@@ -13,9 +14,12 @@ const isShowAppend = ref(false)
       <NuxtLink to="/" class="rounded bg-cyan-400 px-6 py-1 text-white mb-4 inline-flex">
         Back
       </NuxtLink>
-      <button class="rounded bg-cyan-400 px-4 text-1xl text-white" @click="() => isShowAppend = !isShowAppend">Append</button>
+      <UIButton :action="toggleShow">Append</UIButton>
     </div>
-    <div class="flex gap-4 flex-wrap">
+    <FormDishCreate v-if="isShowAppend">
+      <UIButton :action="toggleShow">Cancel</UIButton>
+    </FormDishCreate>
+    <div class="flex gap-4 flex-wrap mt-4">
       <div v-for="dish in dishList" :key="dish.id" class="mb-4 p-4 border border-blue-50 border-2 w-80">
         <p class="text-2xl mb-4"> {{ dish.name }}</p>
         <div class="flex">
@@ -40,7 +44,6 @@ const isShowAppend = ref(false)
         </div>
       </div>
     </div>
-    <FormDishCreate v-if="isShowAppend" />
   </MainLayout>
 </template>
 

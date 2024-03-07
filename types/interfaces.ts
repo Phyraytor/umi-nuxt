@@ -19,4 +19,9 @@ export interface IDish {
   structure: IStructure[];
 }
 
+export interface IHistory {
+  day: number;
+  dish_id: number;
+}
+
 export type IProductSumField = Exclude<Exclude<keyof IProduct, 'id'>, 'name'>;

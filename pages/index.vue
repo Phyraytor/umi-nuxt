@@ -3,21 +3,25 @@ definePageMeta({
   middleware: ['auth'],
 })
 import { FormWarehouseBuy } from "#components"
-import type { IDish, IStructure } from "~/types/interfaces"
+import type { IDish, IHistory, IStructure } from "~/types/interfaces"
 import MainLayout from "~/layouts/MainLayout.vue"
 
-const warehouseStore = useWarehouseStore()
-const productStore = useProductStore()
+
 const dishStore = useDishStore()
-const productList: IStructure[] = warehouseStore.getAll
+const historyStore = useHistoryStore()
 const dishList: IDish[] = dishStore.getAll
 const isShowBuyForm = ref(false)
-const toggleShowBuyForm = () => isShowBuyForm.value = !isShowBuyForm.value
-const getProductName = (id: number) => productStore.get(id)?.name
 const dishId: Ref<number | undefined> = ref()
+const day = ref(1)
+
+const getDishName = (id: number) => dishStore.get(id)?.name
+const prev = () => historyStore.minDay <= day.value - 1 && day.value--
+const next = () => historyStore.maxDay >= day.value && day.value++
+const toggleShowBuyForm = () => isShowBuyForm.value = !isShowBuyForm.value
+
 const makeDish = () => {
   if (!dishId) return
-  dishStore.makeDish(dishId.value)
+  dishStore.makeDish(day.value, Number(dishId.value))
 }
 </script>
 
@@ -27,39 +31,34 @@ const makeDish = () => {
       Back
     </NuxtLink>
     <div class="flex justify-between p-4 border border-blue-50 border-2">
-      <div class="">
-        <p class="text-4xl mb-6">My product list</p>
-        <ul class="flex flex-col">
-          <li v-for="product in productList" :key="product.product_id" class="flex">
-            <span class="basis-6/12">{{ getProductName(product.product_id) }}:</span>
-            <span class="basis-6/12">{{ product.weight }} gram</span>
-          </li>
-        </ul>
-      </div>
+      <WarehouseList />
       <div>
         <FormWarehouseBuy v-if="isShowBuyForm">
-          <button
-            @click="toggleShowBuyForm"
-            class="rounded bg-cyan-400 px-6 py-1 text-white"
-          >Cancel
-          </button>
+          <UIButton :action="toggleShowBuyForm">Cancel</UIButton>
         </FormWarehouseBuy>
-        <button
-          v-if="!isShowBuyForm"
-          class="rounded bg-cyan-400 px-6 py-1 text-white"
-          @click="toggleShowBuyForm"
-        >Buy product
-        </button>
+        <UIButton v-if="!isShowBuyForm" :action="toggleShowBuyForm">Buy product</UIButton>
       </div>
     </div>
-    <div class="p-4 border border-blue-50 border-2 mt-6">
-      <p class="text-4xl mb-6">Make dish</p>
-      <select class="px-2 py-1" v-model="dishId">
-        <option v-for="dish in dishList" :value="dish.id" class="px-2 py-1">
-          {{ dish.name }}
-        </option>
-      </select>
-      <button @click="makeDish" class="ml-4 rounded bg-cyan-400 px-6 py-1 text-white">Make</button>
+    <div class="flex justify-between border-blue-50 border-2 p-4  mt-6">
+      <div class="">
+        <div class="flex justify-between gap-4 mb-2">
+          <p class="text-4xl">Day: {{ day }}</p>
+          <UIButton :action="prev">Prev</UIButton>
+          <UIButton :action="next">Next</UIButton>
+        </div>
+        <DaySum :day="day" />
+        <p class="text-xl mt-2">Dishes list</p>
+        <div v-for="(dish_id, index) in historyStore.getDay(day)" :key="index">
+          <p> {{ getDishName(dish_id) }}</p>
+        </div>
+      </div>
+      <div class="">
+        <p class="text-4xl mb-6">Make dish</p>
+        <div class="flex gap-4">
+          <UISelect v-model="dishId" :list="dishList" />
+          <UIButton :action="makeDish">Make</UIButton>
+        </div>
+      </div>
     </div>
   </MainLayout>
 </template>
